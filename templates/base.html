@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Websocket Chatroom</title>
+</head>
+<body>
+    <h1>Websocket Chatroom</h1>
+    <form id="message-form" onsubmit="addMessage(event)">
+
+        <input id="message-input" type="text">
+        <button id="submit-btn" type="submit">Send</button>
+
+    </form>
+    <div id="chat-box">
+
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+    <script>
+
+        const socket = io()
+        const form = document.getElementById("message-form")
+        const input = document.getElementById("message-input")
+        const chatBox = document.getElementById("chat-box")
+
+        const addMessage = (event) => {
+            event.preventDefault() //prevents page from refreshing on submit
+            const message = input.value;
+            
+            if (message != ''){
+                socket.emit('message', message)
+            }
+            input.value = ''
+        }
+
+        socket.on("message", (message) =>{
+            const p = document.createElement('p')
+            p.textContent = message
+            chatBox.appendChild(p)
+        })
+
+    </script>
+</body>
+</html>
